@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spring SSE</title>
+    <script>
+	function initialize() {
+		const eventSource = new EventSource('http://localhost:8080/details');
+		eventSource.onmessage = e => {
+			const data = e.data;
+			document.getElementById("Data").innerHTML = data;
+		};
+		eventSource.onopen = e => console.log('open');
+		eventSource.onerror = e => {
+			if (e.readyState == EventSource.CLOSED) {
+				console.log('close');
+			}
+			else {
+				console.log(e);
+			}
+		};
+		eventSource.addEventListener('second', function(e) {
+			console.log('second', e.data);
+		}, false);
+	}
+	window.onload = initialize;
+</script>
+</head>
+<body>
+<div id="Data"></div>
+</body>
+</html>
